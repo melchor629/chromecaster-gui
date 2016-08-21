@@ -45,17 +45,17 @@ app.config(($routeProvider, localStorageServiceProvider) => {
 
 app.controller('WindowController', function($scope, $rootScope, $location, localStorageService) {
     $scope.platform = process.platform;
-    if(localStorageService.get('selectedAudioDevice') === undefined) {
+    if(localStorageService.get('selectedAudioDevice') === null) {
         localStorageService.set('selectedAudioDevice', ''); //Default value
     }
     if(audioDevices.indexOf(localStorageService.get('selectedAudioDevice')) === -1) {
         localStorageService.remove('selectedAudioDevice'); //Get back to default value
     }
-    if(localStorageService.get('selectedQuality') === undefined) {
-        localStorageService.get('selectedQuality', ''); //Default value
+    if(localStorageService.get('selectedQuality') === null) {
+        localStorageService.get('selectedQuality', 2); //Default value MP3-320Kbps
     }
-    if(localStorageService.get('showWindow') === undefined) {
-        localStorageService.set('showWindow', true); //Default value
+    if(localStorageService.get('showWindow') === null) {
+        localStorageService.set('showWindow', true); //Default value Show
     }
     if(localStorageService.get('showWindow') !== true) {
         remote.getCurrentWindow().hide(); //Hide if showWindow is not true
