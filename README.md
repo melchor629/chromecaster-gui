@@ -3,8 +3,8 @@
 
  Send audio to a Chromecast using MP3 (with various bitrates) or FLAC.
 
- Dependencies and Requirements
- =============================
+Dependencies and Requirements
+=============================
 ### macOS (aka OS X)
   - 10.9 or higher
 
