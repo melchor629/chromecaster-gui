@@ -30,6 +30,7 @@ hr {
     position: fixed;
     top: 10px;
     left: 10px;
+    -webkit-app-region: no-drag;
 }
 
 .closeButton:hover::before {
@@ -54,6 +55,7 @@ hr {
     position: fixed;
     top: 10px;
     left: 30px;
+    -webkit-app-region: no-drag;
 }
 
 .minimizeButton:hover::before {
@@ -86,6 +88,7 @@ hr {
 
 .navbar-link {
     margin-right: 0;
+    -webkit-app-region: no-drag;
 }
 
 .navbar-link.active {

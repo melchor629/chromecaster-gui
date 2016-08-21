@@ -158,11 +158,15 @@ class CATray extends EventEmitter {
 
         config.changed((key, newValue) => {
             if(key === 'selectedQuality') {
-                this.setQuality(newValue);
+                if(newValue) {
+                    this.setQuality(newValue);
+                }
             } else if(key === 'selectedAudioDevice') {
-                let index = require('chromecaster-lib').AudioInput.getDevices().indexOf(newValue);
-                this._menu.items[0].submenu.items[index].checked = true;
-                if(process.platform === 'linux') this._tray.setContextMenu(this._menu);
+                if(newValue) {
+                    let index = require('chromecaster-lib').AudioInput.getDevices().indexOf(newValue);
+                    this._menu.items[0].submenu.items[index].checked = true;
+                    if(process.platform === 'linux') this._tray.setContextMenu(this._menu);
+                }
             } else if(key === 'selectedChromecast') {
                 for(let item in this._menu.items[1].submenu.items) {
                     if(item.label === newValue) {
