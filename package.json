@@ -39,7 +39,7 @@
       },
       "linux": {
           "compression": "xz",
-          "depends": [ "libpulse-dev", "libavahi-compat-libdnssd-dev", "libflac", "libappindicator1", "libnotify-bin", "libflac8" ]
+          "depends": [ "libpulse0", "libavahi-compat-libdnssd1", "libappindicator1", "libnotify-bin", "libflac8" ]
       }
   }
 }
