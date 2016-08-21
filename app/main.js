@@ -134,6 +134,7 @@ app.on('activate', () => {
 let browser = null, browserTimeout = null;
 let client = null;
 let ai = null, enc = null, web = null;
+let powerSaveId = null;
 
 electron.ipcMain.on('getAudioDevices', (event) => {
     event.returnValue = c.AudioInput.getDevices();
@@ -221,6 +222,7 @@ electron.ipcMain.on('connectChromecast', tt.connectChromecast = (event, name, au
             tray.stopCastingVisibility = true;
             event.sender.send('connectChromecast:ok', status);
             console.log("connectChromecast:ok sent");
+            powerSaveId = electron.powerSaveBlocker.start('prevent-app-suspension');
             client = Client;
             client.on('status', (status) => {
                 tray.setStatusMessage(status);
@@ -283,7 +285,8 @@ electron.ipcMain.on('disconnectChromecast', tt.disconnectChromecast = (event) =>
     enc.end();
     web.stop();
     client.close();
-    client = ai = web = enc = null;
+    electron.powerSaveBlocker.stop(powerSaveBlocker);
+    client = ai = web = enc = powerSaveBlocker = null;
     tray.startCastingVisibility = true;
     tray.stopCastingVisibility = false;
     tray.setStatusMessage();
