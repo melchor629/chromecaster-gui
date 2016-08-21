@@ -144,7 +144,7 @@ app.on('ready', onReadyApp = () => {
             }
         ];
     }
-    if(!process.env.DEBUG) {
+    if(process.argv[process.argv.length - 1] !== '--dev') {
         template.splice(template.length - 2, 1);
     } else {
         mainWindow.webContents.openDevTools();

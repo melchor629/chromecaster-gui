@@ -1,8 +1,8 @@
 {
   "scripts": {
     "postinstall": "install-app-deps",
-    "start": "DEBUG=true  electron ./app",
-    "debug": "DEBUG=true  electron ./app --debug-brk=9222",
+    "start": "electron ./app --dev",
+    "debug": "electron ./app --debug-brk=9222 --dev",
     "pack": "build --x64 --dir --publish never",
     "dist": "build --x64 --publish never"
   },
