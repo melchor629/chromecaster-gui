@@ -44,7 +44,7 @@ app.config(($routeProvider, localStorageServiceProvider) => {
 });
 
 app.controller('WindowController', function($scope, $rootScope, $location, localStorageService) {
-    $scope.scipe = 'eishf';
+    $scope.platform = process.platform;
     if(localStorageService.get('selectedAudioDevice') === undefined) {
         localStorageService.set('selectedAudioDevice', ''); //Default value
     }

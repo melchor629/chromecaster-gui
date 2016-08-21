@@ -11,8 +11,9 @@ let mainWindow = null;
 let menu = null;
 let tray = null;
 let tt = {};
+let crashes = 0, onReadyApp, quitApp;
 
-app.on('ready', () => {
+app.on('ready', onReadyApp = () => {
     mainWindow = new BrowserWindow({
         width: 300,
         height: 500,
@@ -20,15 +21,63 @@ app.on('ready', () => {
         minHeight: 500,
         maxWidth: 300,
         maxHeight: 500,
-        frame: false,
-        title: "Chromecaster"
+        frame: process.platform !== 'darwin',
+        titleBarStyle: 'hidden',
+        maximizable: false,
+        fullscreenable: false,
+        resizable: false,
+        title: "Chromecaster",
+        webgl: false,
+        webaudio: false,
+        show: false
     });
     mainWindow.loadURL(`file://${__dirname}/index.html`);
-    if(process.env.DEBUG) mainWindow.webContents.openDevTools();
     mainWindow.on('close', (e) => {
         mainWindow = null;
     });
 
+    mainWindow.webContents.on('crashed', () => {
+        let msg = '';
+        if(crashes === 0) {
+            msg = 'If it crashes again, the app will close.';
+        } else {
+            msg = 'The app will close';
+        }
+        electron.dialog.showErrorBox('Chromecaster window has crashed',
+            `The window has crashed. ${msg}`);
+        crashes++;
+        if(crashes === 1) {
+            let lewin = mainWindow;
+            tray.destroy();
+            onReadyApp();
+            lewin.destroy();
+        } else {
+            quitApp();
+        }
+    });
+
+    mainWindow.on('unresponsive', () => {
+        electron.dialog.showMessageBox({
+            type: 'warning',
+            buttons: [ 'Wait', 'Quit' ],
+            defaultId: 0,
+            cancelId: 1,
+            title: 'Chromecaster window not responds',
+            message: 'The window become unresponsive. You could wait until gets'+
+                ' responsive again or close the app.'
+        }, (r) => {
+            if(r === 1) {
+                quitApp();
+            }
+        });
+    });
+
+    process.on('uncaughtException', (error) => {
+        console.log(error);
+        electron.dialog.showErrorBox('Chromecaster had an internal error',
+            'The app has an internal unrecoverable error and must be closed.');
+        quitApp();
+    });
 
     const template = [
         {
@@ -97,6 +146,8 @@ app.on('ready', () => {
     }
     if(!process.env.DEBUG) {
         template.splice(template.length - 2, 1);
+    } else {
+        mainWindow.webContents.openDevTools();
     }
 
     menu = electron.Menu.buildFromTemplate(template);
@@ -110,11 +161,13 @@ app.on('ready', () => {
             flac.load('libFLAC.so');
     }
 
-    electron.ipcMain.once('windowLoaded', () => tray.loadConfig());
+    electron.ipcMain.once('windowLoaded', () => {
+        mainWindow.show();
+        tray.loadConfig();
+    });
 });
 
-app.on('window-all-closed', () => {
-    app.quit();
+app.on('window-all-closed', quitApp = () => {
     tray.destroy();
     if(client !== null) {
         ai.close();
@@ -122,6 +175,7 @@ app.on('window-all-closed', () => {
         web.stop();
         client.close();
     }
+    app.quit();
 });
 
 app.on('activate', () => {

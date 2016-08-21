@@ -14,8 +14,8 @@
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <a class="closeButton" ng-click="closeApp()"></a>
-                    <a class="minimizeButton" ng-click="minimizeApp()"></a>
+                    <a class="closeButton" ng-click="closeApp()" ng-show="platform !== 'darwin'"></a>
+                    <a class="minimizeButton" ng-click="minimizeApp()" ng-show="platform !== 'darwin'"></a>
 
                     <a class="navbar-toggle navbar-link" ng-class="{active: url === '/about'}" href="#/about"><i class="material-icons">info</i></a>
                     <a class="navbar-toggle navbar-link" ng-class="{active: url === '/config'}" href="#/config"><i class="material-icons">settings</i></a>
