@@ -6,7 +6,8 @@
   "author": "melchor629 <melchor9000@gmail.com>",
   "copyright": "© 2016, melchor629",
   "homepage": "http://melchor9000.me",
-  "license": "ISC",
+  "license": "GPLv3",
+  "repository": "https://github.com/melchor629/chromecaster-gui",
   "main": "main.js",
   "dependencies": {
     "angular": "^1.5.7",
