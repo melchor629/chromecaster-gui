@@ -1,0 +1,3 @@
+[submodule "app/material-kit"]
+	path = app/material-kit
+	url = https://github.com/timcreative/material-kit.git

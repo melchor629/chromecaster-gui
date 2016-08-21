@@ -1,0 +1,27 @@
+<center>
+    <button class="btn btn-primary" ng-click="startCasting()" ng-disabled="castState !== 'ready'" ng-hide="castState === 'connected'"><i class="material-icons">cast</i> Start casting</button>
+    <button class="btn btn-primary" ng-click="stopCasting()" ng-show="castState === 'connected'"><i class="material-icons">cast_connected</i> Stop casting</button><br>
+    <span ng-show="castState === 'searching'">Looking for {{castName}}...</span>
+    <span ng-show="castState === 'connecting'">Connecting to {{castName}}...</span>
+</center>
+
+<div class="container">
+    <div class="row" ng-show="castState !== 'ready'">
+        <div class="col-xs-6">
+            <span><b>Cast status:</b></span>
+        </div>
+        <div class="col-xs-6">
+            <span>{{connexionStatus}}</span>
+        </div>
+    </div>
+
+    <div class="row" ng-show="castState === 'connected'">
+        <div class="col-xs-9">
+            <div id="slideVolume" class="slider slider-info"></div>
+        </div>
+        <div class="col-xs-3" id="muteButtons">
+            <button class="btn btn-info btn-fab btn-fab-mini btn-round" ng-hide="muted" ng-click="mute(!muted)"><i class="material-icons">volume_off</i></button>
+            <button class="btn btn-info btn-fab btn-fab-mini btn-round" ng-show="muted" ng-click="mute(!muted)"><i class="material-icons">volume_up</i></button>
+        </div>
+    </div>
+</div>

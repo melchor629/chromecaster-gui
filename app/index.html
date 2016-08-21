@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es" ng-app="ChromecasterGui">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Chromecaster GUI</title>
+
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+        <link rel="stylesheet" href="material-kit/assets/css/material-kit.css">
+        <link rel="stylesheet" href="index.css">
+    </head>
+    <body ng-controller="WindowController">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="closeButton" ng-click="closeApp()"></a>
+                    <a class="minimizeButton" ng-click="minimizeApp()"></a>
+
+                    <a class="navbar-toggle navbar-link" ng-class="{active: url === '/about'}" href="#/about"><i class="material-icons">info</i></a>
+                    <a class="navbar-toggle navbar-link" ng-class="{active: url === '/config'}" href="#/config"><i class="material-icons">settings</i></a>
+                    <a class="navbar-toggle navbar-link" ng-class="{active: url === '/home'}" href="#/home"><i class="material-icons">cast</i></a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container-fluid"><div ng-view></div></div>
+
+        <script src="index.js"></script>
+    </body>
+</html>

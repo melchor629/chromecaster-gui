@@ -1,0 +1,43 @@
+<div class="row">
+    <div class="col-xs-12">
+        <h3>Select audio device</h3>
+        <select class="form-control" ng-model="selectedAudioDevice">
+            <option selected disabled value="">Select one…</option>
+            <option ng-value="deviceName" ng-repeat="deviceName in audioDevices">{{deviceName}}</option>
+        </select>
+    </div>
+
+    <div class="col-xs-12">
+        <h3>Select Chromecast
+            <div class="loader" ng-show="isSearchingCAs">
+                <svg class="circular" viewBox="25 25 50 50">
+                    <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="5" stroke-miterlimit="10"/>
+                </svg>
+            </div>
+            <button class="btn btn-info btn-fab btn-fab-mini btn-round" ng-hide="isSearchingCAs" style="float:right;height:34px;min-width:34px;width:34px" ng-click="updateCAs()">
+                <i class="material-icons">cached</i>
+            </button>
+        </h3>
+        <select class="form-control" ng-model="selectedChromecast">
+            <option selected disabled value="">Select one…</option>
+            <option ng-value="deviceName" ng-repeat="deviceName in chromecasts">{{deviceName}}</option>
+        </select>
+    </div>
+
+    <div class="col-xs-12">
+        <h3>Select audio quality</h3>
+        <select class="form-control" ng-model="selectedQuality">
+            <option selected disabled value="">Select one…</option>
+            <option value="flac-hd">FLAC HD (96KHz - 24bit)</value>
+            <option value="flac">FLAC (44.1KHz - 16bit)</value>
+            <option value="320">MP3 - 320Kbps</value>
+            <option value="256">MP3 - 256Kbps</value>
+            <option value="224">MP3 - 224Kbps</value>
+            <option value="192">MP3 - 192Kbps</value>
+            <option value="160">MP3 - 160Kbps</value>
+            <option value="128">MP3 - 128Kbps</value>
+            <option value="112">MP3 - 112Kbps</value>
+            <option value="96">MP3 - 96Kbps</value>
+        </select>
+    </div>
+</div>

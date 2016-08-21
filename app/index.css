@@ -1,0 +1,208 @@
+div, span, p, h1, h2, h3 {
+    -webkit-user-select: none;
+    cursor: default;
+}
+
+nav {
+    -webkit-app-region: drag;
+}
+
+body > .container, body > .container-fluid {
+    margin-top: 90px;
+}
+
+.selectable {
+    -webkit-user-select: initial;
+}
+
+hr {
+    margin: 0;
+}
+
+.closeButton {
+    background: rgb(252, 98, 93);
+    border: 1px solid rgba(223,72,69,1);
+    width: 12px;
+    height: 12px;
+    display: inherit;
+    border-radius: 12px;
+    text-decoration: none !important;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+}
+
+.closeButton:hover::before {
+    content: 'x';
+    font-size: 11px;
+    font-weight: bold;
+    color: rgb(126, 5, 8);
+    position: relative;
+    top: -7px;
+    left: 2px;
+    text-decoration: none;
+}
+
+.minimizeButton {
+    background: rgb(253, 190, 65);
+    border: 1px solid rgba(223, 161, 53, 1);
+    width: 12px;
+    height: 12px;
+    display: inherit;
+    border-radius: 12px;
+    text-decoration: none !important;
+    position: fixed;
+    top: 10px;
+    left: 30px;
+}
+
+.minimizeButton:hover::before {
+    content: '–';
+    font-size: 14px;
+    font-weight: bold;
+    color: rgb(152, 87, 18);
+    position: relative;
+    top: -6px;
+    left: 1px;
+    text-decoration: none;
+}
+
+.unfocused {
+    background-color: #681C75 !important
+}
+
+.unfocused .closeButton, .unfocused .minimizeButton {
+    background-color: rgb(233, 233, 233);
+    border: 1px solid rgb(209, 209, 209);
+}
+
+.unfocused .navbar-link.active {
+    color: #b7835d !important
+}
+
+.unfocused .navbar-link {
+    color: rgb(209, 209, 209)
+}
+
+.navbar-link {
+    margin-right: 0;
+}
+
+.navbar-link.active {
+    color: #FFB74D;
+}
+
+.navbar-link.active:hover {
+    color: #FFB74D;
+}
+
+.container > .navbar-header, .container-fluid > .navbar-header, .container > .navbar-collapse, .container-fluid > .navbar-collapse {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+/* http://codepen.io/jczimm/pen/vEBpoL */
+.loader {
+    position: relative;
+    margin: 0 auto;
+    width: 35px;
+    float: right;
+}
+.loader:before {
+    content: '';
+    display: block;
+    padding-top: 100%;
+}
+
+.circular {
+    -webkit-animation: rotate 2s linear infinite;
+    animation: rotate 2s linear infinite;
+    height: 100%;
+    -webkit-transform-origin: center center;
+    transform-origin: center center;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+.path {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+    -webkit-animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+    animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+    stroke-linecap: round;
+}
+
+@-webkit-keyframes rotate {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes rotate {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+@-webkit-keyframes dash {
+    0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -35px;
+    }
+    100% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -124px;
+    }
+}
+@keyframes dash {
+    0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -35px;
+    }
+    100% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -124px;
+    }
+}
+@-webkit-keyframes color {
+    100%, 0% {
+        stroke: #d62d20;
+    }
+    40% {
+        stroke: #0057e7;
+    }
+    66% {
+        stroke: #008744;
+    }
+    80%, 90% {
+        stroke: #ffa700;
+    }
+}
+@keyframes color {
+    100%, 0% {
+        stroke: #d62d20;
+    }
+    40% {
+        stroke: #0057e7;
+    }
+    66% {
+        stroke: #008744;
+    }
+    80%, 90% {
+        stroke: #ffa700;
+    }
+}
