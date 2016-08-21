@@ -7,13 +7,13 @@ class CATray extends EventEmitter {
     constructor(win, tt) {
         super();
         if(process.platform === 'windows') {
-            this._tray = new Tray('app/icons/icon.ico');
+            this._tray = new Tray(__dirname + '/icons/icon.ico');
         } else if(process.platform === 'darwin') {
-            let a = require('electron').nativeImage.createFromPath('app/icons/trayTemplate.png');
+            let a = require('electron').nativeImage.createFromPath(__dirname + '/icons/trayTemplate.png');
             a.setTemplateImage(true);
             this._tray = new Tray(a);
         } else {
-            this._tray = new Tray('app/icons/icon-32.png');
+            this._tray = new Tray(__dirname + '/icons/icon-32.png');
         }
 
         const menu = [
