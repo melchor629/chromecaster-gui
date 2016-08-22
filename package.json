@@ -33,6 +33,7 @@
           "!material-kit/**/*",
           "material-kit/assets/+(js|css)/*"
       ],
+      "extraResources": [ "lib/${os}/*" ],
       "compression": "normal",
       "mac": {
           "icon": "app/icons/icon.icns"

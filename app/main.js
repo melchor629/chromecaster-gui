@@ -155,10 +155,13 @@ app.on('ready', onReadyApp = () => {
     tray = new CATray(mainWindow, tt);
 
     if('function' === typeof flac.load) {
+        console.log('Loading libFLAC from resources');
         if(process.platform === 'darwin')
-            flac.load('../Frameworks/libFLAC.dylib');
+            flac.load(__dirname + '/../lib/mac/libFLAC.dylib');
         else if(process.platform === 'linux')
-            flac.load('libFLAC.so');
+            flac.load(__dirname + '/../libFLAC.so');
+        else if(process.platform === 'windows')
+            flac.load(__dirname + '/../lib/win/ libFLAC.dll');
     }
 
     electron.ipcMain.once('windowLoaded', () => {
