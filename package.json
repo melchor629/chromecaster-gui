@@ -1,6 +1,7 @@
 {
   "scripts": {
     "postinstall": "install-app-deps",
+    "rebuild": "cd app && electron-rebuild",
     "start": "electron ./app --dev",
     "debug": "electron ./app --debug-brk=9222 --dev",
     "pack": "build --x64 --dir --publish never",
@@ -12,40 +13,51 @@
   ],
   "devDependencies": {
     "devtron": "^1.3.0",
-    "electron-prebuilt": "^1.2.7",
-    "electron-builder": "^5.21.1"
+    "electron-builder": "^5.21.1",
+    "electron-prebuilt": "^1.2.7"
   },
   "directories": {
-      "app": "app"
+    "app": "app"
   },
   "build": {
-      "appId": "me.melchor9000.chromecaster-gui",
-      "category": "public.app-category.music",
-      "asar": true,
-      "files": [
-          "**/*",
-          "!node_modules/*/build/**/*",
-          "node_modules/*/build/Release/*.node",
-          "!node_modules/lame/deps${/*}",
-          "!node_modules/lame/examples${/*}",
-          "!**/*.c?(pp|c)",
-          "!**/*.h?(pp)",
-          "!material-kit/**/*",
-          "material-kit/assets/+(js|css)/*"
+    "appId": "me.melchor9000.chromecaster-gui",
+    "category": "public.app-category.music",
+    "asar": true,
+    "files": [
+      "**/*",
+      "!node_modules/*/build/**/*",
+      "node_modules/*/build/Release/*.node",
+      "!node_modules/lame/deps${/*}",
+      "!node_modules/lame/examples${/*}",
+      "!**/*.c?(pp|c)",
+      "!**/*.h?(pp)",
+      "!material-kit/**/*",
+      "material-kit/assets/+(js|css)/*"
+    ],
+    "extraResources": [
+      "lib/${os}/*"
+    ],
+    "compression": "normal",
+    "mac": {
+      "icon": "app/icons/icon.icns"
+    },
+    "linux": {
+      "compression": "xz",
+      "depends": [
+        "libpulse0",
+        "libavahi-compat-libdnssd1",
+        "libappindicator1",
+        "libnotify-bin",
+        "libflac8"
+      ]
+    },
+    "win": {
+      "target": [
+        "squirrel",
+        "zip"
       ],
-      "extraResources": [ "lib/${os}/*" ],
-      "compression": "normal",
-      "mac": {
-          "icon": "app/icons/icon.icns"
-      },
-      "linux": {
-          "compression": "xz",
-          "depends": [ "libpulse0", "libavahi-compat-libdnssd1", "libappindicator1", "libnotify-bin", "libflac8" ]
-      },
-      "win": {
-          "target": [ "squirrel", "zip" ],
-          "iconUrl": "https://github.com/melchor629/chromecaster-gui/blob/master/app/icons/icon.ico?raw=true",
-          "icon": "app/icons/icon.ico"
-      }
+      "iconUrl": "https://github.com/melchor629/chromecaster-gui/blob/master/app/icons/icon.ico?raw=true",
+      "icon": "app/icons/icon.ico"
+    }
   }
 }
