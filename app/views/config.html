@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-xs-12">
         <h3>Select audio device</h3>
-        <select class="form-control" ng-model="selectedAudioDevice">
+        <select class="form-control" ng-model="selectedAudioDevice" ng-change="selectedAudioDeviceChanged(selectedAudioDevice)">
             <option selected disabled value="">Select one…</option>
             <option ng-value="deviceName" ng-repeat="deviceName in audioDevices">{{deviceName}}</option>
         </select>
@@ -18,7 +18,7 @@
                 <i class="material-icons">cached</i>
             </button>
         </h3>
-        <select class="form-control" ng-model="selectedChromecast">
+        <select class="form-control" ng-model="selectedChromecast" ng-change="selectedChromecastChanged(selectedChromecast)">
             <option selected disabled value="">Select one…</option>
             <option ng-value="deviceName" ng-repeat="deviceName in chromecasts">{{deviceName}}</option>
         </select>
@@ -26,18 +26,18 @@
 
     <div class="col-xs-12">
         <h3>Select audio quality</h3>
-        <select class="form-control" ng-model="selectedQuality">
+        <select class="form-control" ng-model="selectedQuality" ng-change="selectedQualityChanged(selectedQuality)">
             <option selected disabled value="">Select one…</option>
-            <option value="flac-hd">FLAC HD (96KHz - 24bit)</value>
-            <option value="flac">FLAC (44.1KHz - 16bit)</value>
-            <option value="320">MP3 - 320Kbps</value>
-            <option value="256">MP3 - 256Kbps</value>
-            <option value="224">MP3 - 224Kbps</value>
-            <option value="192">MP3 - 192Kbps</value>
-            <option value="160">MP3 - 160Kbps</value>
-            <option value="128">MP3 - 128Kbps</value>
-            <option value="112">MP3 - 112Kbps</value>
-            <option value="96">MP3 - 96Kbps</value>
+            <option value="flac-hd">FLAC HD (96KHz - 24bit)</option>
+            <option value="flac">FLAC (44.1KHz - 16bit)</option>
+            <option value="320">MP3 - 320Kbps</option>
+            <option value="256">MP3 - 256Kbps</option>
+            <option value="224">MP3 - 224Kbps</option>
+            <option value="192">MP3 - 192Kbps</option>
+            <option value="160">MP3 - 160Kbps</option>
+            <option value="128">MP3 - 128Kbps</option>
+            <option value="112">MP3 - 112Kbps</option>
+            <option value="96">MP3 - 96Kbps</option>
         </select>
     </div>
 </div>

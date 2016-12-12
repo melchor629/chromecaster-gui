@@ -52,7 +52,7 @@ app.controller('WindowController', function($scope, $rootScope, $location, local
         localStorageService.remove('selectedAudioDevice'); //Get back to default value
     }
     if(localStorageService.get('selectedQuality') === null) {
-        localStorageService.get('selectedQuality', 2); //Default value MP3-320Kbps
+        localStorageService.set('selectedQuality', 320); //Default value MP3-320Kbps
     }
     if(localStorageService.get('showWindow') === null) {
         localStorageService.set('showWindow', true); //Default value Show
@@ -95,6 +95,7 @@ app.controller('WindowController', function($scope, $rootScope, $location, local
     //reflected the changes on the Tray Menu
     $rootScope.$on('chromecaster:changedValue2', (event, a) => {
         ipcRenderer.send('config:changed', a.key, a.value);
+        localStorageService.set(a.key, a.value);
     });
 
     $scope.closeApp = () => {
@@ -113,12 +114,8 @@ app.controller('ConfigController', function($scope, $timeout, localStorageServic
         $.material.init();
     });
 
-    let noEmit = false;
     $scope.scipe = 'Home';
     $scope.audioDevices = audioDevices;
-    $scope.unsad = localStorageService.bind($scope, 'selectedAudioDevice');
-    $scope.selectedChromecast = '';
-    $scope.unsq = localStorageService.bind($scope, 'selectedQuality');
     ipcRenderer.on('discoverChromecasts:reply', (event, name) => {
         $scope.$apply(() => {
             $scope.chromecasts.push(name);
@@ -132,27 +129,6 @@ app.controller('ConfigController', function($scope, $timeout, localStorageServic
 
     $scope.$watch('selectedChromecast', (newValue, oldValue) => {
         localStorageService.set('selectedChromecast', newValue);
-        if(!noEmit) {
-            $rootScope.$emit('chromecaster:changedValue2', { key: 'selectedChromecast', value: newValue });
-        } else {
-            noEmit = false;
-        }
-    });
-
-    $scope.$watch('selectedAudioDevice', (newValue) => {
-        if(!noEmit) {
-            $rootScope.$emit('chromecaster:changedValue2', { key: 'selectedAudioDevice', value: newValue });
-        } else {
-            noEmit = false;
-        }
-    });
-
-    $scope.$watch('selectedQuality', (newValue) => {
-        if(!noEmit) {
-            $rootScope.$emit('chromecaster:changedValue2', { key: 'selectedQuality', value: newValue });
-        } else {
-            noEmit = false;
-        }
     });
 
     $scope.updateCAs = () => {
@@ -162,8 +138,6 @@ app.controller('ConfigController', function($scope, $timeout, localStorageServic
     };
 
     $scope.$on('$locationChangeStart', (event) => {
-        $scope.unsq();
-        $scope.unsad();
         ipcRenderer.removeAllListeners('discoverChromecasts:reply');
         ipcRenderer.removeAllListeners('discoverChromecasts:end');
         ipcRenderer.removeAllListeners('searchChromecasts');
@@ -171,17 +145,26 @@ app.controller('ConfigController', function($scope, $timeout, localStorageServic
 
     $rootScope.$on('chromecaster:changedValue', (event, change) => {
         if(change.key === 'selectedAudioDevice') {
-            noEmit = true;
             $scope.selectedAudioDevice = change.newvalue;
         } else if(change.key === 'selectedQuality') {
-            noEmit = true;
             $scope.selectedQuality = change.newvalue;
         } else if(change.key === 'selectedChromecast') {
-            noEmit = true;
             $scope.selectedChromecast = change.newvalue;
         }
     });
 
+    $scope.selectedAudioDeviceChanged = newValue => {
+        if(newValue) $rootScope.$emit('chromecaster:changedValue2', { key: 'selectedAudioDevice', value: newValue });
+        else $scope.selectedAudioDevice = localStorageService.get('selectedAudioDevice', '');
+    };
+    $scope.selectedQualityChanged = newValue => {
+        if(newValue) $rootScope.$emit('chromecaster:changedValue2', { key: 'selectedQuality', value: newValue });
+        else $scope.selectedQuality = localStorageService.get('selectedQuality', 320);
+    };
+    $scope.selectedChromecastChanged = newValue => {
+        if(newValue) $rootScope.$emit('chromecaster:changedValue2', { key: 'selectedChromecast', value: newValue });
+        else $scope.selectedChromecast = '';
+    };
     $scope.updateCAs();
 });
 
