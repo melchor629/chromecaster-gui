@@ -343,8 +343,8 @@ electron.ipcMain.on('disconnectChromecast', tt.disconnectChromecast = (event) =>
     enc.end();
     web.stop();
     client.close();
-    electron.powerSaveBlocker.stop(powerSaveBlocker);
-    client = ai = web = enc = powerSaveBlocker = null;
+    electron.powerSaveBlocker.stop(powerSaveId);
+    client = ai = web = enc = powerSaveId = null;
     tray.startCastingVisibility = true;
     tray.stopCastingVisibility = false;
     tray.setStatusMessage();
