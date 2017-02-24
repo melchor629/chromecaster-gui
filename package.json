@@ -1,7 +1,6 @@
 {
   "scripts": {
     "postinstall": "install-app-deps",
-    "rebuild": "cd app && electron-rebuild",
     "start": "electron ./app --dev",
     "debug": "electron ./app --debug-brk=9222 --dev",
     "pack": "build --x64 --dir --publish never",

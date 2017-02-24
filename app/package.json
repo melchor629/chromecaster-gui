@@ -2,7 +2,7 @@
   "name": "chromecaster-gui",
   "productName": "Chromecaster",
   "description": "Sends your audio to a Chromecast",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "melchor629 <melchor9000@gmail.com>",
   "copyright": "© 2016, melchor629",
   "homepage": "http://melchor9000.me",
