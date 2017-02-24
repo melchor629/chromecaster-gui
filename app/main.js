@@ -285,12 +285,14 @@ electron.ipcMain.on('connectChromecast', tt.connectChromecast = (event, name, au
             client.on('status', (status) => {
                 tray.setStatusMessage(status);
                 event.sender.send('chromecast:status', status);
+                console.log("chromecast:status sent with " + JSON.stringify(status));
             });
             client.on('error', (error) => {
                 tray.setStatusMessage();
                 tray.startCastingVisibility = true;
                 tray.stopCastingVisibility = false;
                 event.sender.send('chromecast:error', error);
+                console.log("chromecast:error sent with " + JSON.stringify(error));
             });
         }
     });

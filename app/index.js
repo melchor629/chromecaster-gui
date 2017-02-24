@@ -269,7 +269,7 @@ app.controller('HomeController', function($scope, $timeout, $animate, localStora
         ipcRenderer.on('chromecast:error', (event, error) => {
             console.log(error);
             $scope.$apply(() => showError(`An error has occurred while casting. Casting is going to be stopped...<br>${error}`));
-            ipcRenderer.on('disconnectChromecast');
+            ipcRenderer.send('disconnectChromecast');
         });
         ipcRenderer.on('disconnectChromecast:reply', (event) => {
             $scope.$apply(() => $scope.castState = 'ready');
