@@ -1,6 +1,6 @@
 <center>
-    <button class="btn btn-primary" ng-click="startCasting()" ng-disabled="castState !== 'ready'" ng-hide="castState === 'connected'"><i class="material-icons">cast</i> Start casting</button>
-    <button class="btn btn-primary" ng-click="stopCasting()" ng-show="castState === 'connected'"><i class="material-icons">cast_connected</i> Stop casting</button><br>
+    <button class="btn btn-primary" ng-click="startCasting()" ng-disabled="castState !== 'ready'" ng-hide="castState === 'connected'">Start casting</button>
+    <button class="btn btn-primary" ng-click="stopCasting()" ng-show="castState === 'connected'">Stop casting</button><br>
     <span ng-show="castState === 'searching'">Looking for {{castName}}...</span>
     <span ng-show="castState === 'connecting'">Connecting to {{castName}}...</span>
 </center>

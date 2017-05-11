@@ -10,13 +10,13 @@
   "repository": "https://github.com/melchor629/chromecaster-gui",
   "main": "main.js",
   "dependencies": {
-    "angular": "^1.5.7",
+    "angular": "^1.6.4",
     "angular-local-storage": "^0.2.7",
-    "angular-route": "^1.5.8",
-    "bootstrap": "^3.3.6",
+    "angular-route": "^1.6.4",
+    "bootstrap": "^3.3.7",
     "chromecaster-lib": "^0.4.0",
     "jquery": "^3.1.0",
     "lame": "^1.2.4",
-    "flac-bindings": "^1.0.3"
+    "flac-bindings": "^1.2.1"
   }
 }
