@@ -17,7 +17,6 @@
   },
   "build": {
     "appId": "me.melchor9000.chromecaster-gui",
-    "category": "public.app-category.music",
     "asar": true,
     "directories": {
       "app": "app"
@@ -38,10 +37,11 @@
     ],
     "compression": "normal",
     "mac": {
+      "category": "public.app-category.music",
       "icon": "app/icons/icon.icns"
     },
     "linux": {
-      "compression": "xz",
+      "category": "public.app-category.music",
       "depends": [
         "libpulse0",
         "libavahi-compat-libdnssd1",
@@ -55,7 +55,6 @@
         "squirrel",
         "zip"
       ],
-      "iconUrl": "https://github.com/melchor629/chromecaster-gui/blob/master/app/icons/icon.ico?raw=true",
       "icon": "app/icons/icon.ico"
     }
   }
