@@ -11,9 +11,9 @@
     "chromecast"
   ],
   "devDependencies": {
-    "devtron": "^1.4.0",
-    "electron-builder": "^17.5.0",
-    "electron-prebuilt": "^1.4.13"
+    "devtron": "~1.4.0",
+    "electron-builder": "~17.5.0",
+    "electron": "~1.4.0"
   },
   "build": {
     "appId": "me.melchor9000.chromecaster-gui",

@@ -168,7 +168,7 @@ app.controller('ConfigController', function($scope, $timeout, localStorageServic
     $scope.updateCAs();
 });
 
-app.controller('HomeController', function($scope, $timeout, $animate, localStorageService) {
+app.controller('HomeController', function($scope, $timeout, $animate, localStorageService, $rootScope) {
     $scope.$on('$viewContentLoaded', function() {
         $.material.init();
         $('#slideVolume').noUiSlider({
@@ -209,6 +209,8 @@ app.controller('HomeController', function($scope, $timeout, $animate, localStora
 
     $scope.castState = ipcRenderer.sendSync('isConnected') ? 'connected' : 'ready';
     $scope.muted = false;
+    $scope.castName = localStorageService.get('selectedChromecast');
+    $scope.audioDevice = localStorageService.get('selectedAudioDevice');
     $scope.startCasting = () => {
         if(!localStorageService.get('selectedChromecast')) {
             return showError('No Chromecast have been selected. Go to Configuration to select one', "#/config");
@@ -219,6 +221,7 @@ app.controller('HomeController', function($scope, $timeout, $animate, localStora
         }
 
         $scope.castName = localStorageService.get('selectedChromecast');
+        $scope.audioDevice = localStorageService.get('selectedAudioDevice');
         ipcRenderer.send('connectChromecast', localStorageService.get('selectedChromecast'), localStorageService.get('selectedAudioDevice'), localStorageService.get('selectedQuality'));
         listenConnection();
     };
@@ -301,6 +304,14 @@ app.controller('HomeController', function($scope, $timeout, $animate, localStora
 
     ipcRenderer.on('startCasting', (event) => {console.log("startCasting");$scope.$apply(listenConnection);});
     ipcRenderer.on('searchChromecasts', (event) => {console.log("searchChromecasts");ipcRenderer.send('discoverChromecasts');});
+
+    $rootScope.$on('chromecaster:changedValue', (event, change) => {
+        if(change.key === 'selectedAudioDevice') {
+            $scope.audioDevice = change.newvalue;
+        } else if(change.key === 'selectedChromecast') {
+            $scope.castName = change.newvalue;
+        }
+    });
 });
 
 app.controller('AboutController', function($scope) {

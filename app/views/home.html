@@ -1,18 +1,17 @@
 <center>
     <button class="btn btn-primary" ng-click="startCasting()" ng-disabled="castState !== 'ready'" ng-hide="castState === 'connected'">Start casting</button>
     <button class="btn btn-primary" ng-click="stopCasting()" ng-show="castState === 'connected'">Stop casting</button><br>
-    <span ng-show="castState === 'searching'">Looking for {{castName}}...</span>
-    <span ng-show="castState === 'connecting'">Connecting to {{castName}}...</span>
+    <span ng-show="castState === 'searching'">Searching Chromecast...</span>
+    <span ng-show="castState === 'connecting'">Connecting...</span>
 </center>
 
 <div class="container">
-    <div class="row" ng-show="castState !== 'ready'">
-        <div class="col-xs-6">
-            <span><b>Cast status:</b></span>
-        </div>
-        <div class="col-xs-6">
-            <span>{{connexionStatus}}</span>
-        </div>
+    <div class="row">
+        Selected Chromecast is {{castName}}
+    </div>
+
+    <div class="row">
+        Selected audio input is {{audioDevice}}
     </div>
 
     <div class="row" ng-show="castState === 'connected'">
