@@ -155,14 +155,27 @@ app.on('ready', onReadyApp = () => {
     electron.Menu.setApplicationMenu(menu);
     tray = new CATray(mainWindow, tt);
 
-    if('function' === typeof flac.load) {
+    const path = require('path');
+    if('function' === typeof flac.bindings.load) {
         console.log('Loading libFLAC from resources');
-        if(process.platform === 'darwin')
-            flac.load(__dirname + '/../lib/mac/libFLAC.dylib');
-        else if(process.platform === 'linux')
-            flac.load(__dirname + '/../libFLAC.so');
-        else if(process.platform === 'windows')
-            flac.load(__dirname + '/../lib/win/ libFLAC.dll');
+        if(process.platform === 'darwin') {
+            flac.bindings.load(__dirname + '/../lib/mac/libFLAC.dylib');
+        } else if(process.platform === 'linux') {
+            flac.bindings.load(__dirname + '/../lib/linux/libFLAC.so');
+        } else if(process.platform === 'windows' || process.platform === 'win32') {
+            flac.bindings.load(path.dirname(__dirname) + '\\lib\\win\\libFLAC');
+        }
+    }
+
+    if(!c.AudioInput.isNativeLibraryLoaded()) {
+        console.log('Loading libportaudio from resources');
+        if(process.platform === 'darwin') {
+            c.AudioInput.loadNativeLibrary(__dirname + '/../lib/mac/libportaudio.dylib');
+        } else if(process.platform === 'linux') {
+            c.AudioInput.loadNativeLibrary(__dirname + '/../lib/linux/libportaudio.so');
+        } else if(process.platform === 'windows' || process.platform === 'win32') {
+            c.AudioInput.loadNativeLibrary(path.dirname(__dirname)+'\\lib\\win\\portaudio_x64');
+        }
     }
 
     electron.ipcMain.once('windowLoaded', () => {

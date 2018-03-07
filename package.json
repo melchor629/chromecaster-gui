@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "postinstall": "install-app-deps",
+    "postinstall": "electron-builder install-app-deps",
     "start": "electron ./app --dev",
     "debug": "electron ./app --debug-brk=9222 --dev",
     "pack": "build --x64 --dir --publish never",
@@ -12,8 +12,11 @@
   ],
   "devDependencies": {
     "devtron": "~1.4.0",
-    "electron-builder": "~17.5.0",
-    "electron": "~1.4.0"
+    "electron": "~1.8.0",
+    "electron-builder": "~20.3.1",
+    "electron-builder-lib": "^20.3.1",
+    "electron-builder-squirrel-windows": "^20.3.1",
+    "jshint": "^2.9.5"
   },
   "build": {
     "appId": "me.melchor9000.chromecaster-gui",
@@ -43,7 +46,7 @@
     "linux": {
       "category": "public.app-category.music",
       "depends": [
-        "libpulse0",
+        "portaudio19-dev",
         "libavahi-compat-libdnssd1",
         "libappindicator1",
         "libnotify-bin",

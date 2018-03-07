@@ -2,7 +2,7 @@
   "name": "chromecaster-gui",
   "productName": "Chromecaster",
   "description": "Sends your audio to a Chromecast",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": "melchor629 <melchor9000@gmail.com>",
   "copyright": "© 2017, melchor629",
   "homepage": "http://melchor9000.me",
@@ -14,9 +14,9 @@
     "angular-local-storage": "^0.2.7",
     "angular-route": "^1.6.4",
     "bootstrap": "^3.3.7",
-    "chromecaster-lib": "^0.4.1",
+    "chromecaster-lib": "https://github.com/melchor629/node-chromecaster-lib",
     "jquery": "^3.1.0",
     "lame": "^1.2.4",
-    "flac-bindings": "^1.2.1"
+    "flac-bindings": "^1.2.3"
   }
 }
