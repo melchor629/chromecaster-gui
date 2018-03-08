@@ -11,7 +11,7 @@ Dependencies and Requirements
 ### Linux
   - Ubuntu 12.04 and later, or Fedora 21 or Debian 8
   - 64 bit OS
-  - libpulse0 (_[PulseAudio](https://www.freedesktop.org/wiki/Software/PulseAudio/)_)
+  - libportaudio0
   - libappindicator1 (_for tray icon, if supported_)
   - libnotify-bin (_for notifications_)
   - libflac8
