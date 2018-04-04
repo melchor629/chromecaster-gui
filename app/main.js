@@ -5,6 +5,7 @@ const app = electron.app;
 const c = require('chromecaster-lib');
 const lame = require('lame');
 const flac = require('flac-bindings');
+const wav = require('wav');
 const CATray = require('./tray.js');
 
 let mainWindow = null;
@@ -248,17 +249,30 @@ electron.ipcMain.on('connectChromecast', tt.connectChromecast = (event, name, au
     tray.startCastingVisibility = false;
     tray.setStatusMessage('Starting internal things...');
     let Client = browser.createClient(name);
-    web = new c.Webcast({ port: 8080, contentType: quality.match(/flac.*/) ? 'audio/flac' : 'audio/mp3' });
+    let contentType;
     if(quality === 'flac') {
-        ai = new c.AudioInput({ deviceName: audioDevice });
+        ai = new c.AudioInput({ deviceName: audioDevice, bps: 16, samplerate: 44100 });
         enc = new flac.StreamEncoder();
+        contentType = 'audio/flac';
         console.log("Using FLAC encoder");
-    } else if(quality == 'flac-hd') {
+    } else if(quality === 'flac-hd') {
         ai = new c.AudioInput({ deviceName: audioDevice, bps: 24, samplerate: 96000 });
         enc = new flac.StreamEncoder({ bitsPerSample: 24, samplerate: 96000 });
+        contentType = 'audio/flac';
         console.log("Using FLAC encoder with 96KHz and 24bit");
+    } else if(quality === 'wav') {
+        ai = new c.AudioInput({ deviceName: audioDevice, bps: 16, samplerate: 44100 });
+        enc = new wav.Writer();
+        contentType = 'audio/wav';
+        console.log("Using WAV container, no encoding done");
+    } else if(quality === 'wav-hd') {
+        ai = new c.AudioInput({ deviceName: audioDevice, bps: 24, samplerate: 96000 });
+        enc = new wav.Writer({ sampleRate: 96000, bitDepth: 24 });
+        contentType = 'audio/wav';
+        console.log("Using WAV container, no encoding done");
     } else {
         ai = new c.AudioInput({ deviceName: audioDevice });
+        contentType = 'audio/mp3';
         console.log("Using lame encoder");
         enc = new lame.Encoder({
             channels: 2,
@@ -269,6 +283,7 @@ electron.ipcMain.on('connectChromecast', tt.connectChromecast = (event, name, au
             mode: lame.JOINTSTEREO
         });
     }
+    web = new c.Webcast({ port: 8080, contentType });
 
     ai.open();
     web.on('connected', () => {

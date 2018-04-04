@@ -15,8 +15,9 @@
     "angular-route": "^1.6.4",
     "bootstrap": "^3.3.7",
     "chromecaster-lib": "https://github.com/melchor629/node-chromecaster-lib",
+    "flac-bindings": "^1.2.3",
     "jquery": "^3.1.0",
     "lame": "^1.2.4",
-    "flac-bindings": "^1.2.3"
+    "wav": "^1.0.1"
   }
 }
