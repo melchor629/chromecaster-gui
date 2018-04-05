@@ -1,5 +1,5 @@
 //jshint esversion: 6
-const { app, Menu, MenuItem, Tray, BrowserWindow } = require('electron');
+const { Menu, MenuItem, Tray, BrowserWindow } = require('electron');
 const EventEmitter = require('events');
 const config = require('./config.js');
 
@@ -29,7 +29,7 @@ class CATray extends EventEmitter {
                         enabled: true,
                         click: () => {
                             BrowserWindow.getAllWindows()[0].webContents.send('searchChromecasts');
-                            console.log("searchChromecasts sent from Tray menu");
+                            console.log('searchChromecasts sent from Tray menu');
                             this.emit('searchChromecasts', this);
                         }
                     },
@@ -106,13 +106,13 @@ class CATray extends EventEmitter {
             },
             {
                 label: 'Start casting',
-                click: (menuItem) => {
+                click: () => {
                     config.get('selectedAudioDevice').then(audioDevice => {
                         config.get('selectedQuality').then(quality => {
                             config.get('selectedChromecast').then(chromecast => {
                                 if(chromecast) {
                                     BrowserWindow.getAllWindows()[0].webContents.send('startCasting');
-                                    console.log("startCasting sent from Tray menu");
+                                    console.log('startCasting sent from Tray menu');
                                     tt.connectChromecast({sender: BrowserWindow.getAllWindows()[0].webContents}, chromecast, audioDevice, quality);
                                 } else {
                                     BrowserWindow.getAllWindows()[0].webContents.executeJavaScript(`
@@ -264,18 +264,18 @@ class CATray extends EventEmitter {
 
     setQuality(q) {
         switch(q) {
-            case 'flac-hd': this._menu.items[2].submenu.items[0].checked = true; break;
-            case 'flac': this._menu.items[2].submenu.items[1].checked = true; break;
-            case '320': this._menu.items[2].submenu.items[2].checked = true; break;
-            case '256': this._menu.items[2].submenu.items[3].checked = true; break;
-            case '224': this._menu.items[2].submenu.items[4].checked = true; break;
-            case '192': this._menu.items[2].submenu.items[5].checked = true; break;
-            case '160': this._menu.items[2].submenu.items[6].checked = true; break;
-            case '128': this._menu.items[2].submenu.items[7].checked = true; break;
-            case '112': this._menu.items[2].submenu.items[8].checked = true; break;
-            case '96': this._menu.items[2].submenu.items[9].checked = true; break;
-            case 'wav-hd': this._menu.items[2].submenu.items[10].checked = true; break;
-            case 'wav': this._menu.items[2].submenu.items[11].checked = true; break;
+        case 'flac-hd': this._menu.items[2].submenu.items[0].checked = true; break;
+        case 'flac': this._menu.items[2].submenu.items[1].checked = true; break;
+        case '320': this._menu.items[2].submenu.items[2].checked = true; break;
+        case '256': this._menu.items[2].submenu.items[3].checked = true; break;
+        case '224': this._menu.items[2].submenu.items[4].checked = true; break;
+        case '192': this._menu.items[2].submenu.items[5].checked = true; break;
+        case '160': this._menu.items[2].submenu.items[6].checked = true; break;
+        case '128': this._menu.items[2].submenu.items[7].checked = true; break;
+        case '112': this._menu.items[2].submenu.items[8].checked = true; break;
+        case '96': this._menu.items[2].submenu.items[9].checked = true; break;
+        case 'wav-hd': this._menu.items[2].submenu.items[10].checked = true; break;
+        case 'wav': this._menu.items[2].submenu.items[11].checked = true; break;
         }
         if(process.platform === 'linux') this._tray.setContextMenu(this._menu);
     }

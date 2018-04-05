@@ -27,13 +27,13 @@ app.on('ready', onReadyApp = () => {
         maximizable: false,
         fullscreenable: false,
         resizable: false,
-        title: "Chromecaster",
+        title: 'Chromecaster',
         webgl: false,
         webaudio: false,
         show: false
     });
     mainWindow.loadURL(`file://${__dirname}/index.html`);
-    mainWindow.on('close', (e) => {
+    mainWindow.on('close', () => {
         mainWindow = null;
     });
 
@@ -219,11 +219,11 @@ electron.ipcMain.on('discoverChromecasts', (event) => {
     }
 
     browser = new c.ChromecastDiscover();
-    console.log("discoverChromecasts called");
+    console.log('discoverChromecasts called');
     browser.on('deviceUp', (device) => {
         event.sender.send('discoverChromecasts:reply', device);
         tray.addChromecast(device);
-        console.log("discoverChromecasts:reply sent with " + JSON.stringify(device));
+        console.log('discoverChromecasts:reply sent with ' + JSON.stringify(device));
     });
     browser.start();
     tray._clearChromecasts();
@@ -232,18 +232,18 @@ electron.ipcMain.on('discoverChromecasts', (event) => {
         browser.stop();
         tray.searchChromecastsItemEnabled = true;
         event.sender.send('discoverChromecasts:end');
-        console.log("discoverChromecasts:end sent");
+        console.log('discoverChromecasts:end sent');
     }, 10000);
 });
 
 electron.ipcMain.on('connectChromecast', tt.connectChromecast = (event, name, audioDevice, quality) => {
-    console.log("connectChromecast called with args: '%s', '%s', '%s'", name, audioDevice, quality);
+    console.log('connectChromecast called with args: \'%s\', \'%s\', \'%s\'', name, audioDevice, quality);
     if(client) {
-        console.log("discoverChromecasts:error sent with (\"Already connected\")");
-        return event.sender.send('connectChromecast:error', ("Already connected"));
+        console.log('discoverChromecasts:error sent with ("Already connected")');
+        return event.sender.send('connectChromecast:error', ('Already connected'));
     } else if(!browser) {
-        console.log("discoverChromecasts:error sent with (\"First search for a Chromecast\")");
-        return event.sender.send('connectChromecast:error', ("First search for a Chromecast"));
+        console.log('discoverChromecasts:error sent with ("First search for a Chromecast")');
+        return event.sender.send('connectChromecast:error', ('First search for a Chromecast'));
     }
 
     tray.startCastingVisibility = false;
@@ -254,26 +254,26 @@ electron.ipcMain.on('connectChromecast', tt.connectChromecast = (event, name, au
         ai = new c.AudioInput({ deviceName: audioDevice, bps: 16, samplerate: 44100 });
         enc = new flac.StreamEncoder();
         contentType = 'audio/flac';
-        console.log("Using FLAC encoder");
+        console.log('Using FLAC encoder');
     } else if(quality === 'flac-hd') {
         ai = new c.AudioInput({ deviceName: audioDevice, bps: 24, samplerate: 96000 });
         enc = new flac.StreamEncoder({ bitsPerSample: 24, samplerate: 96000 });
         contentType = 'audio/flac';
-        console.log("Using FLAC encoder with 96KHz and 24bit");
+        console.log('Using FLAC encoder with 96KHz and 24bit');
     } else if(quality === 'wav') {
         ai = new c.AudioInput({ deviceName: audioDevice, bps: 16, samplerate: 44100 });
         enc = new wav.Writer();
         contentType = 'audio/wav';
-        console.log("Using WAV container, no encoding done");
+        console.log('Using WAV container, no encoding done');
     } else if(quality === 'wav-hd') {
         ai = new c.AudioInput({ deviceName: audioDevice, bps: 24, samplerate: 96000 });
         enc = new wav.Writer({ sampleRate: 96000, bitDepth: 24 });
         contentType = 'audio/wav';
-        console.log("Using WAV container, no encoding done");
+        console.log('Using WAV container, no encoding done');
     } else {
         ai = new c.AudioInput({ deviceName: audioDevice });
         contentType = 'audio/mp3';
-        console.log("Using lame encoder");
+        console.log('Using lame encoder');
         enc = new lame.Encoder({
             channels: 2,
             bitDepth: 16,
@@ -287,8 +287,8 @@ electron.ipcMain.on('connectChromecast', tt.connectChromecast = (event, name, au
 
     ai.open();
     web.on('connected', () => {
-        console.log("Chromecast connected to the stream");
-        tray.setStatusMessage("buffering...");
+        console.log('Chromecast connected to the stream');
+        tray.setStatusMessage('buffering...');
         ai.on('data', enc.write.bind(enc));
         enc.on('data', web.write.bind(web));
     });
@@ -299,7 +299,7 @@ electron.ipcMain.on('connectChromecast', tt.connectChromecast = (event, name, au
             tray.startCastingVisibility = true;
             tray.setStatusMessage();
             event.sender.send('connectChromecast:error', err);
-            console.log("connectChromecast:error sent with " + JSON.stringify(err));
+            console.log('connectChromecast:error sent with ' + JSON.stringify(err));
             enc.end();
             web.stop();
             ai = enc = web = null;
@@ -307,68 +307,68 @@ electron.ipcMain.on('connectChromecast', tt.connectChromecast = (event, name, au
             tray.setStatusMessage(status);
             tray.stopCastingVisibility = true;
             event.sender.send('connectChromecast:ok', status);
-            console.log("connectChromecast:ok sent");
+            console.log('connectChromecast:ok sent');
             powerSaveId = electron.powerSaveBlocker.start('prevent-app-suspension');
             client = Client;
             client.on('status', (status) => {
                 tray.setStatusMessage(status);
                 event.sender.send('chromecast:status', status);
-                console.log("chromecast:status sent with " + JSON.stringify(status));
+                console.log('chromecast:status sent with ' + JSON.stringify(status));
             });
             client.on('error', (error) => {
                 tray.setStatusMessage();
                 tray.startCastingVisibility = true;
                 tray.stopCastingVisibility = false;
                 event.sender.send('chromecast:error', error);
-                console.log("chromecast:error sent with " + JSON.stringify(error));
+                console.log('chromecast:error sent with ' + JSON.stringify(error));
             });
         }
     });
 });
 
 electron.ipcMain.on('volume:get', (event) => {
-    console.log("volume:get called");
+    console.log('volume:get called');
     if(client) {
         client.getVolume((err, volume) => {
             if(err) event.sender.send('volume:error', err);
             else event.sender.send('volume:reply', volume);
         });
-    } else event.sender.send('volume:error', ("Not connected to a Chromecast"));
+    } else event.sender.send('volume:error', ('Not connected to a Chromecast'));
 });
 
 electron.ipcMain.on('volume:set', (event, volume) => {
-    console.log("volume:set called with args: %d", volume);
+    console.log('volume:set called with args: %d', volume);
     if(client) {
         client.setVolume(volume, (err, volume) => {
             if(err) event.sender.send('volume:error', err);
             else event.sender.send('volume:reply', volume);
         });
-    } else event.sender.send('volume:error', ("Not connected to a Chromecast"));
+    } else event.sender.send('volume:error', ('Not connected to a Chromecast'));
 });
 
 electron.ipcMain.on('muted:get', (event) => {
-    console.log("volume:get called");
+    console.log('volume:get called');
     if(client) {
         client.isMuted((err, muted) => {
             if(err) event.sender.send('muted:error', err);
             else event.sender.send('muted:reply', muted);
         });
-    } else event.sender.send('muted:error', ("Not connected to a Chromecast"));
+    } else event.sender.send('muted:error', ('Not connected to a Chromecast'));
 });
 
 electron.ipcMain.on('muted:set', (event, muted) => {
-    console.log("muted:set called with args: %s", muted);
+    console.log('muted:set called with args: %s', muted);
     if(client) {
         client.setMuted(muted, (err, muted) => {
             if(err) event.sender.send('muted:error', err);
             else event.sender.send('muted:reply', muted);
         });
-    } else event.sender.send('muted:error', ("Not connected to a Chromecast"));
+    } else event.sender.send('muted:error', ('Not connected to a Chromecast'));
 });
 
 electron.ipcMain.on('disconnectChromecast', tt.disconnectChromecast = (event) => {
-    console.log("disconnectChromecast called");
-    if(!client) return event.sender.send('disconnectChromecast:error', ("Not connected to a Chromecast"));
+    console.log('disconnectChromecast called');
+    if(!client) return event.sender.send('disconnectChromecast:error', ('Not connected to a Chromecast'));
     ai.close();
     enc.end();
     web.stop();
@@ -379,7 +379,7 @@ electron.ipcMain.on('disconnectChromecast', tt.disconnectChromecast = (event) =>
     tray.stopCastingVisibility = false;
     tray.setStatusMessage();
     event.sender.send('disconnectChromecast:reply');
-    console.log("disconnectChromecast:reply sent");
+    console.log('disconnectChromecast:reply sent');
 });
 
 electron.ipcMain.on('isConnected', (event) => {

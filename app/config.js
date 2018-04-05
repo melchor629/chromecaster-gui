@@ -12,7 +12,7 @@ ipcMain.on('config:changed', (event, key, value) => {
 
 module.exports = {
     get(key) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             ipcMain.once('config:reply:' + key, (event, value) => {
                 console.log('config:reply:%s %s', key, value);
                 resolve(value);

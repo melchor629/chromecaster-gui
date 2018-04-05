@@ -1,8 +1,7 @@
 //jshint esversion: 6
-try { require('devtron').install(); } catch(e) { console.log("No devtron installed"); }
+try { require('devtron').install(); } catch(e) { console.log('No devtron installed'); }
 const { ipcRenderer, remote, shell } = require('electron');
 const $ = require('jquery');
-const jQuery = $;
 window.$ = window.jQuery = $;
 require('bootstrap');
 require('angular');
@@ -76,7 +75,7 @@ app.controller('WindowController', function($scope, $rootScope, $location, local
     });
 
     //Trick for the header navbar
-    $rootScope.$on('$locationChangeSuccess', (event) => {
+    $rootScope.$on('$locationChangeSuccess', () => {
         $scope.url = $location.path();
     });
 
@@ -127,7 +126,7 @@ app.controller('ConfigController', function($scope, $timeout, localStorageServic
     ipcRenderer.on('discoverChromecasts:end', () => $scope.$apply(() => $scope.isSearchingCAs = false));
     ipcRenderer.on('searchChromecasts', () => $scope.$apply(() => $scope.updateCAs()));
 
-    $scope.$watch('selectedChromecast', (newValue, oldValue) => {
+    $scope.$watch('selectedChromecast', (newValue) => {
         localStorageService.set('selectedChromecast', newValue);
     });
 
@@ -137,7 +136,7 @@ app.controller('ConfigController', function($scope, $timeout, localStorageServic
         ipcRenderer.send('discoverChromecasts');
     };
 
-    $scope.$on('$locationChangeStart', (event) => {
+    $scope.$on('$locationChangeStart', () => {
         ipcRenderer.removeAllListeners('discoverChromecasts:reply');
         ipcRenderer.removeAllListeners('discoverChromecasts:end');
         ipcRenderer.removeAllListeners('searchChromecasts');
@@ -213,11 +212,11 @@ app.controller('HomeController', function($scope, $timeout, $animate, localStora
     $scope.audioDevice = localStorageService.get('selectedAudioDevice');
     $scope.startCasting = () => {
         if(!localStorageService.get('selectedChromecast')) {
-            return showError('No Chromecast have been selected. Go to Configuration to select one', "#/config");
+            return showError('No Chromecast have been selected. Go to Configuration to select one', '#/config');
         } else if(!localStorageService.get('selectedAudioDevice')) {
-            return showError('No Audio Device selected from which send to the Chromecast. Select one on Configuration', "#/config");
+            return showError('No Audio Device selected from which send to the Chromecast. Select one on Configuration', '#/config');
         } else if(!localStorageService.get('selectedQuality')) {
-            return showError('No quality selected. Select one on Configuration', "#/config");
+            return showError('No quality selected. Select one on Configuration', '#/config');
         }
 
         $scope.castName = localStorageService.get('selectedChromecast');
@@ -244,7 +243,7 @@ app.controller('HomeController', function($scope, $timeout, $animate, localStora
                         $scope.$apply(() => $scope.startCasting());
                     }
                 });
-                ipcRenderer.on('discoverChromecasts:end', (event) => {
+                ipcRenderer.on('discoverChromecasts:end', () => {
                     if($scope.castState === 'searching') {
                         $scope.$apply(() => {
                             $scope.castState = 'ready';
@@ -274,7 +273,7 @@ app.controller('HomeController', function($scope, $timeout, $animate, localStora
             $scope.$apply(() => showError(`An error has occurred while casting. Casting is going to be stopped...<br>${error}`));
             ipcRenderer.send('disconnectChromecast');
         });
-        ipcRenderer.on('disconnectChromecast:reply', (event) => {
+        ipcRenderer.on('disconnectChromecast:reply', () => {
             $scope.$apply(() => $scope.castState = 'ready');
             ipcRenderer.removeAllListeners('connectChromecast:ok');
             ipcRenderer.removeAllListeners('connectChromecast:error');
@@ -302,8 +301,8 @@ app.controller('HomeController', function($scope, $timeout, $animate, localStora
         listenConnected();
     }
 
-    ipcRenderer.on('startCasting', (event) => {console.log("startCasting");$scope.$apply(listenConnection);});
-    ipcRenderer.on('searchChromecasts', (event) => {console.log("searchChromecasts");ipcRenderer.send('discoverChromecasts');});
+    ipcRenderer.on('startCasting', () => {console.log('startCasting');$scope.$apply(listenConnection);});
+    ipcRenderer.on('searchChromecasts', () => {console.log('searchChromecasts');ipcRenderer.send('discoverChromecasts');});
 
     $rootScope.$on('chromecaster:changedValue', (event, change) => {
         if(change.key === 'selectedAudioDevice') {
