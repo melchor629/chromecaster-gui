@@ -88,6 +88,16 @@ class CATray extends EventEmitter {
                         label: 'MP3 - 96Kbps',
                         type: 'radio',
                         click: () => config.set('selectedQuality', '96')
+                    },
+                    {
+                        label: 'WAV HD (96KHz - 24bit)',
+                        type: 'radio',
+                        click: () => config.set('selectedQuality', 'wav-hd')
+                    },
+                    {
+                        label: 'WAV (44.1KHz - 16bit)',
+                        type: 'radio',
+                        click: () => config.set('selectedQuality', 'wav')
                     }
                 ]
             },
@@ -264,6 +274,8 @@ class CATray extends EventEmitter {
             case '128': this._menu.items[2].submenu.items[7].checked = true; break;
             case '112': this._menu.items[2].submenu.items[8].checked = true; break;
             case '96': this._menu.items[2].submenu.items[9].checked = true; break;
+            case 'wav-hd': this._menu.items[2].submenu.items[10].checked = true; break;
+            case 'wav': this._menu.items[2].submenu.items[11].checked = true; break;
         }
         if(process.platform === 'linux') this._tray.setContextMenu(this._menu);
     }
