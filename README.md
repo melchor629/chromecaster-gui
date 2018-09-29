@@ -1,7 +1,7 @@
 # chromecast-gui
  > Cast your computer audio to a Chromecast (Audio)
 
- Send audio to a Chromecast using MP3 (with various bitrates) or FLAC.
+Send audio to a Chromecast using MP3 (with various bitrates) or FLAC.
 
 Dependencies and Requirements
 =============================
@@ -15,10 +15,12 @@ Dependencies and Requirements
   - libappindicator1 (_for tray icon, if supported_)
   - libnotify-bin (_for notifications_)
   - libflac8
-  - libavahi-compat-libdnssd1
   - .deb package install everything for you :)
 
 ### Windows
  - Windows 7 or later
  - 64 bit OS
- - Bonjour service ([Download it](https://support.apple.com/kb/DL999))
+
+## Download
+
+See [latest release](https://github.com/melchor629/chromecaster-gui/releases/latest).
