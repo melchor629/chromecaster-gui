@@ -24,7 +24,7 @@ app.on('ready', onReadyApp = () => {
         maxWidth: 300,
         maxHeight: 500,
         frame: false,
-        titleBarStyle: 'hidden-inset',
+        titleBarStyle: 'hiddenInset',
         maximizable: false,
         fullscreenable: false,
         resizable: false,
@@ -215,6 +215,7 @@ electron.ipcMain.on('getAudioDevices', (event) => {
 
 electron.ipcMain.on('discoverChromecasts', (event) => {
     if(browserTimeout !== null) {
+        browser.stop();
         clearTimeout(browserTimeout);
         browserTimeout = null;
     }

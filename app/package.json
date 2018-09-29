@@ -10,9 +10,9 @@
   "repository": "https://github.com/melchor629/chromecaster-gui",
   "main": "main.js",
   "dependencies": {
-    "angular": "^1.6.4",
-    "angular-local-storage": "^0.2.7",
-    "angular-route": "^1.6.4",
+    "angular": "^1.7.4",
+    "angular-local-storage": "^0.7.1",
+    "angular-route": "^1.7.4",
     "bootstrap": "^3.3.7",
     "chromecaster-lib": "https://github.com/melchor629/node-chromecaster-lib",
     "flac-bindings": "^1.2.3",

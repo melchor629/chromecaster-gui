@@ -117,9 +117,11 @@ app.controller('ConfigController', function($scope, $timeout, localStorageServic
     $scope.audioDevices = audioDevices;
     ipcRenderer.on('discoverChromecasts:reply', (event, name) => {
         $scope.$apply(() => {
-            $scope.chromecasts.push(name);
-            if(localStorageService.get('selectedChromecast') === name) {
-                $scope.selectedChromecast = name;
+            if($scope.chromecasts.indexOf(name) === -1) {
+                $scope.chromecasts.push(name);
+                if(localStorageService.get('selectedChromecast') === name) {
+                    $scope.selectedChromecast = name;
+                }
             }
         });
     });
@@ -154,11 +156,11 @@ app.controller('ConfigController', function($scope, $timeout, localStorageServic
 
     $scope.selectedAudioDeviceChanged = newValue => {
         if(newValue) $rootScope.$emit('chromecaster:changedValue2', { key: 'selectedAudioDevice', value: newValue });
-        else $scope.selectedAudioDevice = localStorageService.get('selectedAudioDevice', '');
+        else $scope.selectedAudioDevice = localStorageService.get('selectedAudioDevice') || '';
     };
     $scope.selectedQualityChanged = newValue => {
         if(newValue) $rootScope.$emit('chromecaster:changedValue2', { key: 'selectedQuality', value: newValue });
-        else $scope.selectedQuality = localStorageService.get('selectedQuality', 320);
+        else $scope.selectedQuality = localStorageService.get('selectedQuality') || 320;
     };
     $scope.selectedChromecastChanged = newValue => {
         if(newValue) $rootScope.$emit('chromecaster:changedValue2', { key: 'selectedChromecast', value: newValue });
