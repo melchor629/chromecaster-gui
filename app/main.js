@@ -237,6 +237,7 @@ electron.ipcMain.on('discoverChromecasts', (event) => {
         tray.searchChromecastsItemEnabled = true;
         event.sender.send('discoverChromecasts:end');
         console.log('discoverChromecasts:end sent');
+        browserTimeout = null;
     }, 10000);
 });
 
