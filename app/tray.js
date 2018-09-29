@@ -23,18 +23,7 @@ class CATray extends EventEmitter {
             },
             {
                 label: 'Chromecasts',
-                submenu: [
-                    {
-                        label: 'Search',
-                        enabled: true,
-                        click: () => {
-                            BrowserWindow.getAllWindows()[0].webContents.send('searchChromecasts');
-                            console.log('searchChromecasts sent from Tray menu');
-                            this.emit('searchChromecasts', this);
-                        }
-                    },
-                    { type: 'separator' }
-                ]
+                submenu: [ ]
             },
             {
                 label: 'Quality',
@@ -144,6 +133,15 @@ class CATray extends EventEmitter {
                 visible: false
             },
             {
+                label: 'Search chromecasts',
+                enabled: true,
+                click: () => {
+                    BrowserWindow.getAllWindows()[0].webContents.send('searchChromecasts');
+                    console.log('searchChromecasts sent from Tray menu');
+                    this.emit('searchChromecasts', this);
+                }
+            },
+            {
                 type: 'separator'
             },
             {
@@ -163,7 +161,10 @@ class CATray extends EventEmitter {
 
     loadConfig() {
         this.setAudioDevices(require('chromecaster-lib').AudioInput.getDevices());
-        config.get('showWindow').then(value => this._menu.items[8].checked = value);
+        config.get('showWindow').then(value => {
+            this._menu.items[9].checked = value;
+            this._tray.setContextMenu(this._menu);
+        });
         config.get('selectedQuality').then(value => this.setQuality(value));
 
         config.changed((key, newValue) => {
@@ -189,13 +190,16 @@ class CATray extends EventEmitter {
     }
 
     get searchChromecastsItemEnabled() {
-        return this._menu.items[1].submenu.items[0].enabled;
+        return this._menu.items[7].enabled;
     }
 
     set searchChromecastsItemEnabled(v) {
-        this._menu.items[1].submenu.items[0].enabled = v;
-        if(v) this._menu.items[1].submenu.items[0].label = 'Searching...';
-        else this._menu.items[1].submenu.items[0].label = 'Search';
+        this._menu.items[7].enabled = v;
+        if(v) {
+            this._menu.items[7].label = 'Searching...';
+        } else {
+            this._menu.items[7].label = 'Search chromecasts';
+        }
         if(process.platform === 'linux') this._tray.setContextMenu(this._menu);
     }
 
@@ -224,13 +228,9 @@ class CATray extends EventEmitter {
     }
 
     _clearChromecasts() {
-        let i = 0;
-        for(let item of this._menu.items[1].submenu.items) {
-            if(i > 1) {
-                item.visible = false;
-            }
-            i++;
-        }
+        this._menu.items[1].submenu.items.forEach((item) => {
+            item.visible = false;
+        });
         this._tray.setContextMenu(this._menu);
     }
 

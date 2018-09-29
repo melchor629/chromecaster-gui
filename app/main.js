@@ -7,6 +7,7 @@ const lame = require('lame');
 const flac = require('flac-bindings');
 const wav = require('wav');
 const CATray = require('./tray.js');
+const config = require('./config.js');
 
 let mainWindow = null;
 let menu = null;
@@ -180,7 +181,7 @@ app.on('ready', onReadyApp = () => {
     }
 
     electron.ipcMain.once('windowLoaded', () => {
-        mainWindow.show();
+        config.get('showWindow').then(value => value && mainWindow.show());
         tray.loadConfig();
     });
 });
@@ -220,10 +221,12 @@ electron.ipcMain.on('discoverChromecasts', (event) => {
 
     browser = new c.ChromecastDiscover();
     console.log('discoverChromecasts called');
-    browser.on('deviceUp', (device) => {
-        event.sender.send('discoverChromecasts:reply', device);
-        tray.addChromecast(device);
-        console.log('discoverChromecasts:reply sent with ' + JSON.stringify(device));
+    browser.on('device', (device) => {
+        if(device.name !== undefined) {
+            event.sender.send('discoverChromecasts:reply', device.name);
+            tray.addChromecast(device.name);
+            console.log('discoverChromecasts:reply sent with ' + JSON.stringify(device));
+        }
     });
     browser.start();
     tray._clearChromecasts();
@@ -283,7 +286,7 @@ electron.ipcMain.on('connectChromecast', tt.connectChromecast = (event, name, au
             mode: lame.JOINTSTEREO
         });
     }
-    web = new c.Webcast({ port: 8080, contentType });
+    web = new c.Webcast({ port: 9876, contentType });
 
     ai.open();
     web.on('connected', () => {
@@ -300,6 +303,7 @@ electron.ipcMain.on('connectChromecast', tt.connectChromecast = (event, name, au
             tray.setStatusMessage();
             event.sender.send('connectChromecast:error', err);
             console.log('connectChromecast:error sent with ' + JSON.stringify(err));
+            ai.close();
             enc.end();
             web.stop();
             ai = enc = web = null;
@@ -316,6 +320,9 @@ electron.ipcMain.on('connectChromecast', tt.connectChromecast = (event, name, au
                 console.log('chromecast:status sent with ' + JSON.stringify(status));
             });
             client.on('error', (error) => {
+                ai.close();
+                enc.end();
+                web.stop();
                 tray.setStatusMessage();
                 tray.startCastingVisibility = true;
                 tray.stopCastingVisibility = false;

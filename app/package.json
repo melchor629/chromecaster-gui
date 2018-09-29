@@ -16,8 +16,8 @@
     "bootstrap": "^3.3.7",
     "chromecaster-lib": "https://github.com/melchor629/node-chromecaster-lib",
     "flac-bindings": "^1.2.3",
-    "jquery": "^3.1.0",
+    "jquery": "^3.3.1",
     "lame": "^1.2.4",
-    "wav": "^1.0.1"
+    "wav": "^1.0.2"
   }
 }

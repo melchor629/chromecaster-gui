@@ -12,11 +12,11 @@
   ],
   "devDependencies": {
     "devtron": "~1.4.0",
-    "electron": "~1.8.0",
-    "electron-builder": "~20.3.1",
-    "electron-builder-lib": "^20.3.1",
-    "electron-builder-squirrel-windows": "^20.3.1",
-    "eslint": "^4.19.1"
+    "electron": "~2.0.10",
+    "electron-builder": "~20.28.4",
+    "electron-builder-lib": "^20.23.1",
+    "electron-builder-squirrel-windows": "^20.28.3",
+    "eslint": "^5.6.1"
   },
   "build": {
     "appId": "me.melchor9000.chromecaster-gui",
@@ -47,7 +47,6 @@
       "category": "public.app-category.music",
       "depends": [
         "portaudio19-dev",
-        "libavahi-compat-libdnssd1",
         "libappindicator1",
         "libnotify-bin",
         "libflac8"
