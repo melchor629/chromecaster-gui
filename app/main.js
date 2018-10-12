@@ -148,7 +148,7 @@ app.on('ready', onReadyApp = () => {
             }
         ];
     }
-    if(process.argv[process.argv.length - 1] !== '--dev') {
+    if(app.isPackaged) {
         logger.info('Starting updater...');
         require('./updater.js');
         template.splice(template.length - 2, 1);
@@ -247,7 +247,7 @@ electron.ipcMain.on('discoverChromecasts', (event) => {
 });
 
 electron.ipcMain.on('connectChromecast', tt.connectChromecast = (event, name, audioDevice, quality) => {
-    logger.debug('connectChromecast called with args: \'%s\', \'%s\', \'%s\'', name, audioDevice, quality);
+    logger.debug(`connectChromecast called with args: '${name}', \'${audioDevice}\', \'${quality}\'`);
     if(client) {
         logger.warn('discoverChromecasts:error sent with ("Already connected")');
         return event.sender.send('connectChromecast:error', ('Already connected'));

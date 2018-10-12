@@ -1,8 +1,8 @@
 {
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
-    "start": "electron ./app --dev",
-    "debug": "electron ./app --debug-brk=9222 --dev",
+    "start": "electron ./app",
+    "debug": "electron ./app --debug-brk=9222",
     "pack": "build --x64 --dir --publish never",
     "dist": "build --x64 --publish never"
   },
@@ -12,7 +12,7 @@
   ],
   "devDependencies": {
     "devtron": "~1.4.0",
-    "electron": "~2.0.10",
+    "electron": "~3.0.4",
     "electron-builder": "~20.28.4",
     "electron-builder-lib": "^20.23.1",
     "electron-builder-squirrel-windows": "^20.28.3",

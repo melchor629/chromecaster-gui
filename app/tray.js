@@ -222,15 +222,19 @@ class CATray extends EventEmitter {
     }
 
     addChromecast(ca) {
-        this._menu.items[1].submenu.append(new MenuItem({
-            label: ca,
-            type: 'radio',
-            click: () => config.set('selectedChromecast', ca)
-        }));
-        this._tray.setContextMenu(this._menu);
+        if(!this._chromecasts.find(mi => mi === ca)) {
+            this._menu.items[1].submenu.append(new MenuItem({
+                label: ca,
+                type: 'radio',
+                click: () => config.set('selectedChromecast', ca)
+            }));
+            this._tray.setContextMenu(this._menu);
+            this._chromecasts.push(ca);
+        }
     }
 
     _clearChromecasts() {
+        this._chromecasts = [];
         this._menu.items[1].submenu.items.forEach((item) => {
             item.visible = false;
         });

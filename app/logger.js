@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { app } = require('electron');
 const winston = require('winston');
 const { combine, timestamp, label, printf } = winston.format;
 
@@ -7,7 +8,7 @@ const myFormat = printf(info => {
 });
 
 let logger;
-if(process.env.NODE_ENV !== 'production' && process.argv.find(a => a === '--dev')) {
+if(!app.isPackaged) {
     logger = winston.createLogger({
         level: 'debug',
         format: winston.format.simple(),
