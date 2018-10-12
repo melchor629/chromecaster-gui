@@ -2,6 +2,7 @@
 const { Menu, MenuItem, Tray, BrowserWindow } = require('electron');
 const EventEmitter = require('events');
 const config = require('./config.js');
+const logger = require('./logger.js');
 
 class CATray extends EventEmitter {
     constructor(win, tt) {
@@ -15,6 +16,8 @@ class CATray extends EventEmitter {
         } else {
             this._tray = new Tray(__dirname + '/icons/icon-32.png');
         }
+
+        logger.info('Building tray...');
 
         const menu = [
             {
@@ -101,7 +104,7 @@ class CATray extends EventEmitter {
                             config.get('selectedChromecast').then(chromecast => {
                                 if(chromecast) {
                                     BrowserWindow.getAllWindows()[0].webContents.send('startCasting');
-                                    console.log('startCasting sent from Tray menu');
+                                    logger.debug('startCasting sent from Tray menu');
                                     tt.connectChromecast({sender: BrowserWindow.getAllWindows()[0].webContents}, chromecast, audioDevice, quality);
                                 } else {
                                     BrowserWindow.getAllWindows()[0].webContents.executeJavaScript(`
@@ -137,7 +140,7 @@ class CATray extends EventEmitter {
                 enabled: true,
                 click: () => {
                     BrowserWindow.getAllWindows()[0].webContents.send('searchChromecasts');
-                    console.log('searchChromecasts sent from Tray menu');
+                    logger.debug('searchChromecasts sent from Tray menu');
                     this.emit('searchChromecasts', this);
                 }
             },
