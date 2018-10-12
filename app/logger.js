@@ -40,8 +40,10 @@ if(!app.isPackaged) {
         ]
     });
 
-    process.stdout.pipe(fs.createWriteStream(`${path}/chromecaster.out.log`, { flags: 'a' }));
-    process.stderr.pipe(fs.createWriteStream(`${path}/chromecaster.err.log`, { flags: 'a' }));
+    try {
+        process.stdout.pipe(fs.createWriteStream(`${path}/chromecaster.out.log`, { flags: 'a' }));
+        process.stderr.pipe(fs.createWriteStream(`${path}/chromecaster.err.log`, { flags: 'a' }));
+    } catch(e) {}
 
     console.warn(` > Logs can be found in ${path} <`);
 }

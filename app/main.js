@@ -78,6 +78,7 @@ app.on('ready', onReadyApp = () => {
     process.on('uncaughtException', (error) => {
         logger.error('Uncaught exception:');
         logger.error(error);
+        error.stack.split('\n').forEach(line => logger.error(line));
         electron.dialog.showErrorBox('Chromecaster had an internal error',
             'The app has an internal unrecoverable error and must be closed.');
         quitApp();
@@ -406,7 +407,7 @@ electron.ipcMain.on('volume:set', (event, volume) => {
 });
 
 electron.ipcMain.on('muted:get', (event) => {
-    logger.debug('volume:get called');
+    logger.debug('muted:get called');
     if(client) {
         client.isMuted((err, muted) => {
             if(err) {
@@ -414,7 +415,7 @@ electron.ipcMain.on('muted:get', (event) => {
                 logger.warn(`muted:error with ${err.message} ${JSON.stringify(err)}`);
             } else {
                 event.sender.send('muted:reply', muted);
-                logger.debug(`muted:reply with ${volume}`);
+                logger.debug(`muted:reply with ${muted}`);
             }
         });
     } else {
@@ -432,7 +433,7 @@ electron.ipcMain.on('muted:set', (event, muted) => {
                 logger.warn(`muted:error with ${err.message} ${JSON.stringify(err)}`);
             } else {
                 event.sender.send('muted:reply', muted);
-                logger.debug(`muted:reply with ${volume}`);
+                logger.debug(`muted:reply with ${muted}`);
             }
         });
     } else {
