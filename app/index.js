@@ -198,8 +198,8 @@ app.controller('HomeController', function($scope, $timeout, $animate, localStora
         }
     });
 
-    let showError = (error, link) => {
-        let n = new Notification('Could not connect to Chromecast', { body: error, silent: true });
+    let showError = (title, error, link) => {
+        let n = new Notification(title, { body: error, silent: true });
         n.onclick = () => {
             n.close();
             if(link) {
@@ -214,11 +214,11 @@ app.controller('HomeController', function($scope, $timeout, $animate, localStora
     $scope.audioDevice = localStorageService.get('selectedAudioDevice');
     $scope.startCasting = () => {
         if(!localStorageService.get('selectedChromecast')) {
-            return showError('No Chromecast have been selected. Go to Configuration to select one', '#/config');
+            return showError('No Chromecast have been selected', 'Go to Configuration to select one', '#/config');
         } else if(!localStorageService.get('selectedAudioDevice')) {
-            return showError('No Audio Device selected from which send to the Chromecast. Select one on Configuration', '#/config');
+            return showError('No Audio Device selected to capture', 'Select one on Configuration', '#/config');
         } else if(!localStorageService.get('selectedQuality')) {
-            return showError('No quality selected. Select one on Configuration', '#/config');
+            return showError('No quality selected', 'Select one on Configuration', '#/config');
         }
 
         $scope.castName = localStorageService.get('selectedChromecast');
@@ -237,6 +237,7 @@ app.controller('HomeController', function($scope, $timeout, $animate, localStora
         ipcRenderer.on('connectChromecast:error', (event, error) => {
             ipcRenderer.removeAllListeners('chromecast:status');
             ipcRenderer.removeAllListeners('chromecast:error');
+            console.log(error);
             if(error === 'First search for a Chromecast') {
                 $scope.$apply(() => $scope.castState = 'searching');
                 ipcRenderer.send('discoverChromecasts');
@@ -249,12 +250,24 @@ app.controller('HomeController', function($scope, $timeout, $animate, localStora
                     if($scope.castState === 'searching') {
                         $scope.$apply(() => {
                             $scope.castState = 'ready';
-                            showError(`Could not find ${$scope.castName}...`);
+                            showError(`Could not find ${$scope.castName}...`, 'The chromecast is not available anymore. Try again...');
                         });
                     }
                 });
+            } else if('object' === typeof error) {
+                if(error.num === 1) {
+                    $scope.$apply(() => showError(`Could not capture audio: ${error.reason}`,
+                                                  `Device: '${error.config.deviceName}'\n`+
+                                                  `Sample Rate: ${error.config.samplerate || 44100}\n`+
+                                                  `Bit Depth: ${error.config.bps || 16}`));
+                    $scope.$apply(() => $scope.castState = 'ready');
+                } else if(error.num === 2) {
+                    $scope.$apply(() => showError(error.what,
+                                                  error.reason));
+                    $scope.$apply(() => $scope.castState = 'ready');
+                }
             } else {
-                $scope.$apply(() => showError(`Could not connect to the Chromecast.<br>${error}`));
+                $scope.$apply(() => showError(`Could not connect to the Chromecast.\n${error}`));
                 $scope.$apply(() => $scope.castState = 'ready');
             }
         });

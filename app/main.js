@@ -255,28 +255,30 @@ electron.ipcMain.on('connectChromecast', tt.connectChromecast = (event, name, au
     tray.setStatusMessage('Starting internal things...');
     let Client = browser.createClient(name);
     let contentType;
+
+    let audioConfig;
     if(quality === 'flac') {
-        ai = new c.AudioInput({ deviceName: audioDevice, bps: 16, samplerate: 44100 });
+        audioConfig = { deviceName: audioDevice, bps: 16, samplerate: 44100 };
         enc = new flac.StreamEncoder();
         contentType = 'audio/flac';
         console.log('Using FLAC encoder');
     } else if(quality === 'flac-hd') {
-        ai = new c.AudioInput({ deviceName: audioDevice, bps: 24, samplerate: 96000 });
+        audioConfig = { deviceName: audioDevice, bps: 24, samplerate: 96000 };
         enc = new flac.StreamEncoder({ bitsPerSample: 24, samplerate: 96000 });
         contentType = 'audio/flac';
         console.log('Using FLAC encoder with 96KHz and 24bit');
     } else if(quality === 'wav') {
-        ai = new c.AudioInput({ deviceName: audioDevice, bps: 16, samplerate: 44100 });
+        audioConfig = { deviceName: audioDevice, bps: 16, samplerate: 44100 };
         enc = new wav.Writer();
         contentType = 'audio/wav';
         console.log('Using WAV container, no encoding done');
     } else if(quality === 'wav-hd') {
-        ai = new c.AudioInput({ deviceName: audioDevice, bps: 24, samplerate: 96000 });
+        audioConfig = { deviceName: audioDevice, bps: 24, samplerate: 96000 };
         enc = new wav.Writer({ sampleRate: 96000, bitDepth: 24 });
         contentType = 'audio/wav';
         console.log('Using WAV container, no encoding done');
     } else {
-        ai = new c.AudioInput({ deviceName: audioDevice });
+        audioConfig = { deviceName: audioDevice, bps: 16, samplerate: 44100 };
         contentType = 'audio/mp3';
         console.log('Using lame encoder');
         enc = new lame.Encoder({
@@ -288,7 +290,32 @@ electron.ipcMain.on('connectChromecast', tt.connectChromecast = (event, name, au
             mode: lame.JOINTSTEREO
         });
     }
-    web = new c.Webcast({ port: 9876, contentType });
+
+    try {
+        console.log("Using this audio configuration", audioConfig);
+        ai = new c.AudioInput(audioConfig);
+    } catch(e) {
+        enc.end();
+        event.sender.send('connectChromecast:error', {
+            num: 1,
+            what: `Could not open audio device`,
+            reason: e.message,
+            config: audioConfig
+        });
+        return;
+    }
+
+    try {
+        web = new c.Webcast({ port: 9876, contentType });
+    } catch(e) {
+        enc.end();
+        ai.close();
+        event.sender.send('connectChromecast:error', {
+            num: 2,
+            what: 'Could not open local server for sending audio to Chromecast',
+            reason: e.message
+        });
+    }
 
     ai.open();
     web.on('connected', () => {
