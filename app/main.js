@@ -298,7 +298,7 @@ electron.ipcMain.on('connectChromecast', tt.connectChromecast = (event, name, au
     }
 
     try {
-        logger.info("Using this audio configuration", audioConfig);
+        logger.info("Using this audio configuration: " + JSON.stringify(audioConfig));
         ai = new c.AudioInput(audioConfig);
     } catch(e) {
         logger.error(e);

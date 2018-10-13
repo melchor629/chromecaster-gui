@@ -16,7 +16,7 @@ module.exports = {
     get(key) {
         return new Promise((resolve) => {
             ipcMain.once('config:reply:' + key, (event, value) => {
-                logger.info('config:reply:%s %s', key, value);
+                logger.info(`config:reply:${key} ${value}`);
                 resolve(value);
             });
             window().webContents.send('config:get', key);
@@ -26,7 +26,7 @@ module.exports = {
 
     set(key, value) {
         window().webContents.send('config:set', key, value);
-        logger.info('config:set ' + key + ' ' + value);
+        logger.info(`config:set ${key} ${value}`);
     },
 
     changed(list) {
