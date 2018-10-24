@@ -39,5 +39,7 @@ Include too the version of your OS in case of Windows and macOS, and your distri
 
 It is possible that the Windows logs would have been insufficient, in this case it will be requested to grab logs from a `PowerShell`. You can try to run the app by opening the `PowerShell`, then drag and dropping into the command line the executable and finally pressing enter. It will show more text than in the file. This logs in general are needed when there are sound issues.
 
+If the issue has something to do with audio, you can try to listen to the raw audio by playing http://localhost:9877 in a player (Chrome also works for this). That audio is what the app receives from your computer. Also, http://localhost:9876 is another audio stream that you can try to listen to. That's what Chromecast's and other Google devices receives from the app. Compare both streams. That could give us a hint of where the issue is.
+
 
   [1]: https://github.com/melchor629/chromecaster-gui/issues/new
