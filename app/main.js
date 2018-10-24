@@ -9,6 +9,7 @@ const wav = require('wav');
 const CATray = require('./tray.js');
 const config = require('./config.js');
 const logger = require('./logger.js');
+const RawAudioServer = require('./raw-audio-server');
 
 let mainWindow = null;
 let menu = null;
@@ -211,7 +212,7 @@ app.on('activate', () => {
 
 let browser = null, browserTimeout = null;
 let client = null;
-let ai = null, enc = null, web = null;
+let ai = null, enc = null, web = null, devWeb = null;
 let powerSaveId = null;
 
 electron.ipcMain.on('getAudioDevices', (event) => {
@@ -285,7 +286,7 @@ electron.ipcMain.on('connectChromecast', tt.connectChromecast = (event, name, au
         logger.info('Using WAV container, no encoding done');
     } else {
         audioConfig = { deviceName: audioDevice, bps: 16, samplerate: 44100 };
-        contentType = 'audio/mp3';
+        contentType = 'audio/mpeg';
         logger.info('Using lame encoder');
         enc = new lame.Encoder({
             channels: 2,
@@ -314,6 +315,7 @@ electron.ipcMain.on('connectChromecast', tt.connectChromecast = (event, name, au
 
     try {
         web = new c.Webcast({ port: 9876, contentType });
+        logger.info('Stream available at http://localhost:9876');
     } catch(e) {
         logger.error(e);
         enc.end();
@@ -325,12 +327,19 @@ electron.ipcMain.on('connectChromecast', tt.connectChromecast = (event, name, au
         });
     }
 
+    devWeb = new RawAudioServer({ ai, port: 9877, sampleRate: audioConfig.samplerate, bitDepth: audioConfig.bps });
     ai.open();
-    web.on('connected', () => {
-        logger.debug('Chromecast connected to the stream');
+    web.once('connected', ({ id, address, port }) => {
+        logger.debug(`Chromecast #${id} connected to the stream: ${address}:${port}`);
         tray.setStatusMessage('buffering...');
         ai.on('data', enc.write.bind(enc));
         enc.on('data', web.write.bind(web));
+        web.on('connected', ({ id, address, port }) => {
+            logger.debug(`Another device (#${id}) connected to the stream: ${address}:${port}`);
+        });
+    });
+    web.on('disconnected', ({ id, address, port }) => {
+        logger.debug(`A device (#${id}) has disconnected from the stream: ${address}:${port}`);
     });
     Client.setWebcast(web);
     tray.setStatusMessage('Connecting...');
@@ -449,6 +458,7 @@ electron.ipcMain.on('disconnectChromecast', tt.disconnectChromecast = (event) =>
     enc.end();
     web.stop();
     client.close();
+    devWeb.stop();
     electron.powerSaveBlocker.stop(powerSaveId);
     client = ai = web = enc = powerSaveId = null;
     tray.startCastingVisibility = true;
